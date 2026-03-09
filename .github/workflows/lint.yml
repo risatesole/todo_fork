@@ -10,6 +10,7 @@ on:
     branches:
       - main
       - develop
+      - duck
 
 jobs:
   lint:
@@ -19,14 +20,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Setup Node.js with pnpm
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: "pnpm"
-
-      - name: Install pnpm
-        run: npm install -g pnpm
+          cache: pnpm
+          package-manager: pnpm
 
       - name: Install dependencies
         run: pnpm install
