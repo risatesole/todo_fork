@@ -2,31 +2,39 @@ name: Lint
 
 on:
   push:
-    branches: [main, develop, duck]
+    branches:
+      - duck
   pull_request:
-    branches: [main, develop, duck]
+    branches:
+      - duck
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v3
+      # 1. Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
+      # 2. Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: "pnpm"
+          cache: 'pnpm'
 
+      # 3. Setup pnpm
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10   # optional: specify your pnpm version
-          run_install: true   # ✅ this installs pnpm so it's in PATH
+          version: 8 # specify pnpm version
+          run_install: false # don’t auto-run install yet
 
+      # 4. Install dependencies
       - name: Install dependencies
         run: pnpm install
 
+      # 5. Run lint
       - name: Run lint
         run: pnpm lint
