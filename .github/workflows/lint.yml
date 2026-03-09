@@ -1,5 +1,4 @@
-name: Lint
-
+name: CI
 on:
   push:
     branches:
@@ -10,31 +9,24 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-24.04
-
+    runs-on: ubuntu-latest
     steps:
-      # 1. Checkout code
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 2. Setup Node
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: 'pnpm'
-
-      # 3. Setup pnpm
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 8 # specify pnpm version
-          run_install: false # don’t auto-run install yet
+          version: 10 # Optional: specify a pnpm version
 
-      # 4. Install dependencies
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # Specify the Node.js version
+          cache: 'pnpm' # Enables caching for pnpm dependencies
+
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile # Installs dependencies
 
-      # 5. Run lint
       - name: Run lint
-        run: pnpm lint
+        run: pnpm lint # Executes the 'lint' script from package.json
