@@ -1,45 +1,32 @@
-# .github/workflows/lint.yml
 name: Lint
 
 on:
   push:
-    branches:
-      - main
-      - develop
-      - duck
+    branches: [main, develop, duck]
   pull_request:
-    branches:
-      - main
-      - develop
-      - duck
+    branches: [main, develop, duck]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Checkout code
       - uses: actions/checkout@v3
 
-      # 2) Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: "pnpm"
 
-      # 3) Install pnpm package manager
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        # version input is optional if package.json has a packageManager field
-        # you can specify version: 8 if you want a specific version
         with:
-          run_install: false
+          version: 10   # optional: specify your pnpm version
+          run_install: true   # ✅ this installs pnpm so it's in PATH
 
-      # 4) Install dependencies with pnpm
       - name: Install dependencies
         run: pnpm install
 
-      # 5) Run ESLint
-      - name: Run ESLint
+      - name: Run lint
         run: pnpm lint
