@@ -10,7 +10,32 @@ export default class AuthenticationService {
   }
 
   async signup(name: string, email: string, password: string) {
-    throw new Error("Method not implemented yet");
+    const requestConfig = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+      }),
+    };
+
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/api/authentication/signup`,
+        requestConfig,
+      );
+      const text = await response.text();
+
+      try {
+        const data = JSON.parse(text);
+        return data;
+      } catch {
+        return { message: text };
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async signOut(accessToken: string) {
